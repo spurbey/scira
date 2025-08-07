@@ -1,203 +1,106 @@
-# Scira
+# ZLine Kitchen Product Variant Scraper
 
-![Scira](/app/opengraph-image.png)
+A web scraper that implements BFS (Breadth-First Search) traversal to discover ALL product variants on ZLine Kitchen's website. This scraper solves the problem of discovering the complete variant network by following swatch-url attributes across all connected product pages.
 
-A minimalistic AI-powered search engine that helps you find information on the internet.
+## Problem Solved
 
-🔗 **[Try Scira at scira.ai](https://scira.ai)**
-
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/zaidmukaddam/scira)
-
-## Powered By
-
-<div align="center">
-
-| [Vercel AI SDK](https://sdk.vercel.ai/docs) | [Exa AI](https://exa.ai) |
-|:---:|:---:|
-| <img src="/public/one.svg" alt="Vercel AI SDK" height="40" /> | <img src="/public/exa.png" alt="Exa AI" height="40" /> |
-| For AI model integration and streaming | For web search and content retrieval |
-
-</div>
-
-## Special Thanks
-
-<div align="center" markdown="1">
-
-[![Warp](https://github.com/user-attachments/assets/2bda420d-4211-4900-a37e-e3c7056d799c)](https://www.warp.dev/?utm_source=github&utm_medium=referral&utm_campaign=scira)<br>
-
-### **[Warp, the intelligent terminal](https://www.warp.dev/?utm_source=github&utm_medium=referral&utm_campaign=scira)**<br>
-
-[Available for MacOS, Linux, & Windows](https://www.warp.dev/?utm_source=github&utm_medium=referral&utm_campaign=scira)<br>
-[Visit warp.dev to learn more](https://www.warp.dev/?utm_source=github&utm_medium=referral&utm_campaign=scira)
-
-</div>
+ZLine Kitchen product pages contain `swatch-url` attributes that link to other product variants. The challenge is to traverse ALL connected variants without duplicates to map the entire variant network, not just get the variants listed on a single page.
 
 ## Features
 
-### Core Search & Information
+- **Complete BFS Traversal**: Visits every unique variant URL until the entire network is mapped
+- **Duplicate Prevention**: Uses visited set and queue management to avoid revisiting URLs
+- **Enhanced JavaScript**: Triggers lazy loading and dynamic content for better variant discovery
+- **Robust Error Handling**: Continues scraping even if individual pages fail
+- **Detailed Logging**: Shows progress, queue status, and discovery metrics
 
-- **AI-powered search**: Get answers to your questions using multiple AI models including xAI's Grok, Anthropic's Claude, Google's Gemini, and OpenAI's GPT models
-- **Web search**: Search the web using Exa's API with support for multiple queries, search depths, and topics
-- **URL content retrieval**: Extract and analyze content from any URL using Exa AI with live crawling capabilities
-- **Reddit search**: Search Reddit content with time range filtering using Tavily API
-- **X (Twitter) search**: Search X posts with date ranges and specific handle filtering using xAI Live Search
-- **Extreme search**: Advanced multi-step search capability for complex queries
+## Technical Implementation
 
-### Academic & Research
+### BFS Algorithm
+1. Start with one product URL
+2. Extract all `[swatch-url]` attributes from that page
+3. Add new URLs to queue (avoiding duplicates)
+4. Visit each URL in queue and repeat process
+5. Continue until no new URLs are found
 
-- **Academic search**: Search for academic papers and research using Exa AI with abstracts and summaries
-- **YouTube search**: Find YouTube videos with detailed information, captions, and timestamps powered by Exa AI
+### Key Components
+- **ZLineVariantScraper Class**: Manages state and BFS traversal
+- **URL Normalization**: Handles relative/absolute paths consistently
+- **Enhanced JavaScript**: Triggers multiple selectors and events for variant discovery
+- **JsonCssExtractionStrategy**: Extracts structured data from product pages
 
-### Entertainment & Media
+## Installation
 
-- **Movie & TV show search**: Get detailed information about movies and TV shows using TMDB API
-- **Trending movies**: Discover trending movies with cast, ratings, and detailed information
-- **Trending TV shows**: Find popular TV shows with comprehensive metadata
+```bash
+pip install -r requirements.txt
+```
 
-### Financial & Data Analysis
+## Usage
 
-- **Stock charts**: Generate interactive stock charts with news integration using yfinance and Tavily
-- **Currency converter**: Convert between currencies with real-time exchange rates using yfinance
-- **Code interpreter**: Write and execute Python code with chart generation capabilities using Daytona sandbox
+```bash
+python zline_scraper.py
+```
 
-### Location & Travel
+The scraper will:
+1. Start with the predefined ZLine product URL
+2. Discover all connected variants using BFS traversal
+3. Extract title, price, description, and variant URLs from each page
+4. Display a comprehensive summary of all discovered variants
 
-- **Weather information**: Get current weather and forecasts for any location using OpenWeather API
-- **Maps & geocoding**: Find places and get coordinates using Google Maps API
-- **Nearby places search**: Discover nearby restaurants, attractions, and services with Google Places API
-- **Flight tracking**: Track real-time flight information using Aviation Stack API
+## Output
 
-### Productivity & Utilities
+The scraper provides:
+- Real-time progress updates during crawling
+- Queue size and visited URL counts
+- Final summary with all discovered variants
+- Price information and variant counts per page
 
-- **Text translation**: Translate text between languages using AI models
-- **Date & time**: Get current date and time in user's timezone with multiple format options
-- **Memory management**: Add and search personal memories using Mem0 AI
-- **MCP server search**: Search for Model Context Protocol servers using Smithery Registry
+## Configuration
 
-### Search Groups
+You can modify the starting URL in the `main()` function:
 
-- **Web**: Search across the entire internet powered by Tavily
-- **Memory**: Your personal memory companion (requires authentication)
-- **Analysis**: Code execution, stock charts, and currency conversion
-- **Chat**: Direct conversation with AI models
-- **X**: Search X (Twitter) posts
-- **Reddit**: Search Reddit posts
-- **Academic**: Search academic papers powered by Exa
-- **YouTube**: Search YouTube videos powered by Exa
-- **Extreme**: Deep research with multiple sources and analysis
+```python
+start_url = "/products/your-zline-product-url"
+```
 
-## LLM Models Supported
+## Safety Features
 
-- **xAI**: Grok 3, Grok 3 Mini, Grok 2 Vision
-- **Google**: Gemini 2.5 Flash (Preview), Gemini 2.5 Pro (Preview)
-- **Anthropic**: Claude 4 Sonnet
-- **OpenAI**: GPT-4o, o4-mini, o3 (with reasoning capabilities)
-- **Groq**: Qwen QwQ 32B, Qwen 3 32B, Meta's Llama 4 Maverick
+- Maximum iteration limit (100) to prevent infinite loops
+- 1-second delay between requests to be respectful to the server
+- Comprehensive error handling for network issues
+- Timeout settings for page loading
 
-## Built with
+## Example Output
 
-- [Next.js](https://nextjs.org/) - React framework
-- [Tailwind CSS](https://tailwindcss.com/) - Styling
-- [Vercel AI SDK](https://sdk.vercel.ai/docs) - AI model integration
-- [Shadcn/UI](https://ui.shadcn.com/) - UI components
-- [Exa.AI](https://exa.ai/) - Web search and content retrieval
-- [Tavily](https://tavily.com/) - Search grounding for reddit search
-- [OpenWeather](https://openweathermap.org/) - Weather data
-- [Daytona](https://daytona.io/) - Code execution sandbox
-- [Google Maps](https://developers.google.com/maps) - Location services
-- [Aviation Stack](https://aviationstack.com/) - Flight tracking
-- [TMDB](https://www.themoviedb.org/) - Movie and TV data
-- [Mem0](https://mem0.ai/) - Memory management
-- [Better Auth](https://github.com/better-auth/better-auth) - Authentication
-- [Drizzle ORM](https://orm.drizzle.team/) - Database management
+```
+🎯 Starting ZLine variant discovery...
+📍 Starting URL: /products/zline-autograph-edition-30-paramount-gas-range-stainless-steel-champagne-bronze-sgrz-30-cb
+================================================================================
+🔍 [1] Scraping: /products/zline-autograph-edition-30-paramount-gas-range-stainless-steel-champagne-bronze-sgrz-30-cb
+✅ Found: ZLINE 30" Gas Range | Price: $2499.00
+    Variants found on page: 17
+    New URLs added to queue: 17
+    Queue size: 17
+    Total visited: 1
+------------------------------------------------------------
+[... continues for all variants ...]
+================================================================================
+🎉 DISCOVERY COMPLETE!
+📊 Total variants discovered: 45
+🔗 Total URLs visited: 45
+```
 
-### Deploy your own
+## Troubleshooting
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fzaidmukaddam%2Fscira&env=XAI_API_KEY,OPENAI_API_KEY,ANTHROPIC_API_KEY,GROQ_API_KEY,GOOGLE_GENERATIVE_AI_API_KEY,DAYTONA_API_KEY,DATABASE_URL,BETTER_AUTH_SECRET,GITHUB_CLIENT_ID,GITHUB_CLIENT_SECRET,GOOGLE_CLIENT_ID,GOOGLE_CLIENT_SECRET,TWITTER_CLIENT_ID,TWITTER_CLIENT_SECRET,REDIS_URL,ELEVENLABS_API_KEY,TAVILY_API_KEY,EXA_API_KEY,TMDB_API_KEY,YT_ENDPOINT,FIRECRAWL_API_KEY,OPENWEATHER_API_KEY,GOOGLE_MAPS_API_KEY,MAPBOX_ACCESS_TOKEN,AVIATION_STACK_API_KEY,CRON_SECRET,BLOB_READ_WRITE_TOKEN,MEM0_API_KEY,MEM0_ORG_ID,MEM0_PROJECT_ID,SMITHERY_API_KEY,NEXT_PUBLIC_MAPBOX_TOKEN,NEXT_PUBLIC_POSTHOG_KEY,NEXT_PUBLIC_POSTHOG_HOST,NEXT_PUBLIC_SCIRA_PUBLIC_API_KEY,SCIRA_API_KEY&envDescription=API%20keys%20and%20configuration%20required%20for%20Scira%20to%20function)
+If you encounter issues:
 
-## Set Scira as your default search engine
+1. **No variants found**: Check if the website structure has changed
+2. **Connection errors**: Ensure stable internet connection
+3. **JavaScript errors**: The enhanced JS handles most dynamic content cases
+4. **Memory issues**: The scraper includes safety limits and delays
 
-1. **Open the Chrome browser settings**:
+## Notes
 
-   - Click on the three vertical dots in the upper right corner of the browser.
-   - Select "Settings" from the dropdown menu.
-
-2. **Go to the search engine settings**:
-
-   - In the left sidebar, click on "Search engine."
-   - Then select "Manage search engines and site search."
-
-3. **Add a new search engine**:
-
-   - Click on "Add" next to "Site search."
-
-4. **Set the search engine name**:
-
-   - Enter `Scira` in the "Search engine" field.
-
-5. **Set the search engine URL**:
-
-   - Enter `https://scira.ai?q=%s` in the "URL with %s in place of query" field.
-
-6. **Set the search engine shortcut**:
-
-   - Enter `sh` in the "Shortcut" field.
-
-7. **Set Default**:
-   - Click on the three dots next to the search engine you just added.
-   - Select "Make default" from the dropdown menu.
-
-After completing these steps, you should be able to use Scira as your default search engine in Chrome.
-
-### Local development
-
-#### Run via Docker
-
-The application can be run using Docker in two ways:
-
-##### Using Docker Compose (Recommended)
-
-1. Make sure you have Docker and Docker Compose installed on your system
-2. Create a `.env` file based on `.env.example` with your API keys
-3. Run the following command in the project root:
-   ```bash
-   docker compose up
-   ```
-4. The application will be available at `http://localhost:3000`
-
-##### Using Docker Directly
-
-1. Create a `.env` file based on `.env.example` with your API keys
-2. Build the Docker image:
-   ```bash
-   docker build -t scira.app .
-   ```
-3. Run the container:
-   ```bash
-   docker run --env-file .env -p 3000:3000 scira.app
-   ```
-
-The application uses a multi-stage build process to minimize the final image size and implements security best practices. The production image runs on Node.js LTS with Alpine Linux for a minimal footprint.
-
-#### Run with Node.js
-
-To run the application locally without Docker:
-
-1. Sign up for accounts with the required AI providers:
-   - OpenAI (required)
-   - Anthropic (required)
-   - Exa (required for web search feature)
-2. Copy `.env.example` to `.env.local` and fill in your API keys
-3. Install dependencies:
-   ```bash
-   pnpm install
-   ```
-4. Start the development server:
-   ```bash
-   pnpm dev
-   ```
-5. Open `http://localhost:3000` in your browser
-
-# License
-
-This project is licensed under the Apache 2.0 License - see the [LICENSE](LICENSE) file for details.
+- The scraper runs in non-headless mode by default for debugging
+- Modify `headless=True` in browser config for production use
+- The scraper respects the website's structure and includes appropriate delays
